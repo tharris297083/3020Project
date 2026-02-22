@@ -1,1 +1,1 @@
-strat of 
+
