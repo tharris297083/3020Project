@@ -1,0 +1,68 @@
+/* Base table styling */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+td, th {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+th {
+  background: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Hover effect for rows */
+tr:hover {
+  background: #fafafa;
+}
+
+/* Sportsbook logos */
+img {
+  vertical-align: middle;
+  width: 26px;
+  height: auto;
+  margin-right: 6px;
+}
+
+/* Best favorite (negative odds) */
+.best-favorite {
+  background-color: #d4edda; /* light green */
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Best underdog (positive odds) */
+.best-underdog {
+  background-color: #d0e7ff; /* light blue */
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* Line movement arrows */
+.arrow-up {
+  color: #2ecc71; /* green */
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.arrow-down {
+  color: #e74c3c; /* red */
+  font-weight: bold;
+  margin-left: 4px;
+}
+td div {
+  display: block;
+  line-height: 1.2;
+}

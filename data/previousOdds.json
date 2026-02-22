@@ -1,0 +1,344 @@
+{
+  "FanDuel": {
+    "book": "FanDuel",
+    "logo": "/logos/fanduel.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -370,
+        "rawB": 300,
+        "teamA": "-370",
+        "teamB": "+300",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 340,
+        "rawB": -435,
+        "teamA": "+340",
+        "teamB": "-435",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 142,
+        "rawB": -167,
+        "teamA": "+142",
+        "teamB": "-167",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -127,
+        "rawB": 108,
+        "teamA": "-127",
+        "teamB": "+108",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "DraftKings": {
+    "book": "DraftKings",
+    "logo": "/logos/draftkings.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -385,
+        "rawB": 300,
+        "teamA": "-385",
+        "teamB": "+300",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 350,
+        "rawB": -455,
+        "teamA": "+350",
+        "teamB": "-455",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 136,
+        "rawB": -161,
+        "teamA": "+136",
+        "teamB": "-161",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -130,
+        "rawB": 110,
+        "teamA": "-130",
+        "teamB": "+110",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "BetOnline": {
+    "book": "BetOnline",
+    "logo": "/logos/betonline.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -370,
+        "rawB": 296,
+        "teamA": "-370",
+        "teamB": "+296",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 350,
+        "rawB": -455,
+        "teamA": "+350",
+        "teamB": "-455",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 140,
+        "rawB": -161,
+        "teamA": "+140",
+        "teamB": "-161",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -130,
+        "rawB": 110,
+        "teamA": "-130",
+        "teamB": "+110",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "LowVig": {
+    "book": "LowVig",
+    "logo": "/logos/lowvig.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -370,
+        "rawB": 301,
+        "teamA": "-370",
+        "teamB": "+301",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 356,
+        "rawB": -435,
+        "teamA": "+356",
+        "teamB": "-435",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 141,
+        "rawB": -161,
+        "teamA": "+141",
+        "teamB": "-161",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -128,
+        "rawB": 112,
+        "teamA": "-128",
+        "teamB": "+112",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "BetMGM": {
+    "book": "BetMGM",
+    "logo": "/logos/betmgm.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -370,
+        "rawB": 300,
+        "teamA": "-370",
+        "teamB": "+300",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 360,
+        "rawB": -476,
+        "teamA": "+360",
+        "teamB": "-476",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 135,
+        "rawB": -164,
+        "teamA": "+135",
+        "teamB": "-164",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -135,
+        "rawB": 110,
+        "teamA": "-135",
+        "teamB": "+110",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "BetUS": {
+    "book": "BetUS",
+    "logo": "/logos/betus.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -370,
+        "rawB": 295,
+        "teamA": "-370",
+        "teamB": "+295",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 355,
+        "rawB": -455,
+        "teamA": "+355",
+        "teamB": "-455",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 134,
+        "rawB": -154,
+        "teamA": "+134",
+        "teamB": "-154",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -125,
+        "rawB": 105,
+        "teamA": "-125",
+        "teamB": "+105",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "BetRivers": {
+    "book": "BetRivers",
+    "logo": "/logos/betrivers.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -435,
+        "rawB": 310,
+        "teamA": "-435",
+        "teamB": "+310",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 340,
+        "rawB": -476,
+        "teamA": "+340",
+        "teamB": "-476",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 140,
+        "rawB": -179,
+        "teamA": "+140",
+        "teamB": "-179",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -133,
+        "rawB": 108,
+        "teamA": "-133",
+        "teamB": "+108",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "Bovada": {
+    "book": "Bovada",
+    "logo": "/logos/bovada.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -357,
+        "rawB": 280,
+        "teamA": "-357",
+        "teamB": "+280",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 340,
+        "rawB": -455,
+        "teamA": "+340",
+        "teamB": "-455",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 130,
+        "rawB": -149,
+        "teamA": "+130",
+        "teamB": "-149",
+        "moveA": "",
+        "moveB": ""
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -125,
+        "rawB": 105,
+        "teamA": "-125",
+        "teamB": "+105",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  },
+  "MyBookie": {
+    "book": "MyBookie",
+    "logo": "/logos/mybookie.png",
+    "prices": {
+      "439a6986fb7fa87228b403c29d22f4b6": {
+        "rawA": -400,
+        "rawB": 300,
+        "teamA": "-400",
+        "teamB": "+300",
+        "moveA": "",
+        "moveB": ""
+      },
+      "ded265e6250d4401a3786f34c967bc8b": {
+        "rawA": 338,
+        "rawB": -455,
+        "teamA": "+338",
+        "teamB": "-455",
+        "moveA": "",
+        "moveB": ""
+      },
+      "14255f77d428aeeedddf9c964b461b3d": {
+        "rawA": 135,
+        "rawB": -167,
+        "teamA": "+135",
+        "teamB": "-167",
+        "moveA": "↑",
+        "moveB": "↓"
+      },
+      "e553a415ff6fd8af818c5f4bc50fe23d": {
+        "rawA": -128,
+        "rawB": 104,
+        "teamA": "-128",
+        "teamB": "+104",
+        "moveA": "",
+        "moveB": ""
+      }
+    }
+  }
+}
