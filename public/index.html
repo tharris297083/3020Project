@@ -6,7 +6,35 @@
 </head>
 <body>
 
-  <h1>NBA Moneyline Odds</h1>
+  <h1>Sports Odds Comparison</h1>
+
+  <div id="view-selector" class="view-selector">
+    <button class="view-btn active" data-view="comparison">Comparison View</button>
+    <button class="view-btn" data-view="best-bets">Best Bets</button>
+  </div>
+
+  <div id="sport-selector" class="sport-selector" style="display: block;">
+    <button class="sport-btn active" data-sport="nba">NBA</button>
+    <button class="sport-btn" data-sport="nfl">NFL</button>
+    <button class="sport-btn" data-sport="cfb">College Football</button>
+    <button class="sport-btn" data-sport="cbb">College Basketball</button>
+    <button class="sport-btn" data-sport="mlb">MLB</button>
+  </div>
+
+  <div id="market-selector" class="market-selector" style="display: block;">
+    <button class="market-btn active" data-market="h2h">Head-to-Head</button>
+    <button class="market-btn" data-market="spreads">Point Spreads</button>
+    <button class="market-btn" data-market="totals">Totals</button>
+  </div>
+
+  <div id="legend" class="legend">
+    <div class="legend-item">
+      <span class="legend-label">Prob:</span> Implied probability from odds
+    </div>
+    <div class="legend-item">
+      <span class="legend-label">EV:</span> Positive expected value vs best available
+    </div>
+  </div>
 
   <div id="table-container">Loading...</div>
 
