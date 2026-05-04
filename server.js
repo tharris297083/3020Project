@@ -1,15 +1,18 @@
 import express from "express";
 import 'dotenv/config';
 import fs from "fs";
+import fetch from "node-fetch";
+
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.static("public"));
+
 
 // Cache settings
 const CACHE_DIR = "./data";
 const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+const CACHE_VERSION = 3;
 
 // Ensure cache directory exists
 if (!fs.existsSync(CACHE_DIR)) {
@@ -46,6 +49,7 @@ function isCacheValid(sport, market) {
     const metaPath = getCacheMeta(sport, market);
     if (!fs.existsSync(metaPath)) return false;
     const meta = JSON.parse(fs.readFileSync(metaPath));
+    if (meta.version !== CACHE_VERSION) return false;
     return Date.now() - meta.timestamp < CACHE_DURATION;
   } catch {
     return false;
@@ -53,10 +57,11 @@ function isCacheValid(sport, market) {
 }
 
 // Get cached data
-function getCachedData(sport, market) {
+function getCachedData(sport, market, { allowStale = false } = {}) {
   try {
-    if (!isCacheValid(sport, market)) return null;
     const dataPath = getCachePath(sport, market);
+    if (!fs.existsSync(dataPath)) return null;
+    if (!allowStale && !isCacheValid(sport, market)) return null;
     return JSON.parse(fs.readFileSync(dataPath));
   } catch {
     return null;
@@ -67,11 +72,95 @@ function getCachedData(sport, market) {
 function saveToCache(sport, market, data) {
   try {
     fs.writeFileSync(getCachePath(sport, market), JSON.stringify(data, null, 2));
-    fs.writeFileSync(getCacheMeta(sport, market), JSON.stringify({ timestamp: Date.now() }));
+    fs.writeFileSync(getCacheMeta(sport, market), JSON.stringify({ timestamp: Date.now(), version: CACHE_VERSION }));
   } catch (err) {
     console.error(`Cache save error for ${sport} ${market}:`, err);
   }
 }
+
+// Global search endpoint - search across all sports and markets
+app.get("/search", async (req, res) => {
+  const query = req.query.q?.toLowerCase() || "";
+
+  if (query.length < 2) {
+    return res.json({ results: [] });
+  }
+
+  const results = [];
+  const seenGames = new Set();
+
+  for (const [sportKey, sport] of Object.entries(SPORTS)) {
+    for (const marketKey of Object.keys(MARKETS)) {
+      const data = getCachedData(sportKey, marketKey, { allowStale: true });
+      if (!data) continue;
+
+      data.games.forEach(game => {
+        if (!game.toLowerCase().includes(query)) return;
+
+        const uniqueGameKey = `${sportKey}:${game}`;
+        if (seenGames.has(uniqueGameKey)) return;
+        seenGames.add(uniqueGameKey);
+
+        const gameResult = {
+          game,
+          sport: sport.name,
+          sportKey,
+          markets: {}
+        };
+
+        for (const [mKey, mName] of Object.entries(MARKETS)) {
+          const marketData = getCachedData(sportKey, mKey, { allowStale: true });
+          if (!marketData) continue;
+
+          const matchingGameIdx = marketData.games.indexOf(game);
+          if (matchingGameIdx === -1) continue;
+
+          gameResult.markets[mKey] = {
+            name: mName,
+            game: marketData.games[matchingGameIdx],
+            books: marketData.books.map(book => ({
+              book: book.book,
+              logo: book.logo,
+              price: book.prices[matchingGameIdx]
+            }))
+          };
+        }
+
+        results.push(gameResult);
+      });
+    }
+  }
+
+  res.json({ results });
+});
+
+// Endpoint to get specific game from a sport with all markets
+app.get("/game/:sport/:market", async (req, res) => {
+  const sport = req.params.sport;
+  const market = req.params.market;
+  const gameName = req.query.game;
+
+  const data = getCachedData(sport, market, { allowStale: true });
+  if (!data) {
+    return res.status(404).json({ error: "No data found" });
+  }
+
+  const gameIdx = data.games.indexOf(gameName);
+  if (gameIdx === -1) {
+    return res.status(404).json({ error: "Game not found" });
+  }
+
+  res.json({
+    game: data.games[gameIdx],
+    sport: data.sport,
+    market: data.market,
+    books: data.books.map(book => ({
+      book: book.book,
+      logo: book.logo,
+      price: book.prices[gameIdx]
+    }))
+  });
+});
 
 function formatTime(iso) {
   const date = new Date(iso);
@@ -83,6 +172,13 @@ function formatTime(iso) {
 }
 
 // Convert decimal → American odds
+function getLocalDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 function decimalToAmerican(decimal) {
   if (decimal === null || decimal === undefined) return null;
   if (decimal >= 2.0) return Math.round((decimal - 1) * 100);
@@ -161,26 +257,12 @@ async function fetchOddsForSport(sportKey, sportName, market = "h2h") {
     const now = new Date();
     const tomorrow = new Date(now);
     tomorrow.setDate(now.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split("T")[0];
+    const tomorrowStr = getLocalDateKey(tomorrow);
 
     let gamesTomorrow = gamesArray.filter(game => {
-      const gameDate = new Date(game.commence_time).toISOString().split("T")[0];
+      const gameDate = getLocalDateKey(new Date(game.commence_time));
       return gameDate === tomorrowStr;
     });
-
-    if (gamesTomorrow.length === 0 && gamesArray.length > 0) {
-      const sorted = [...gamesArray].sort(
-        (a, b) => new Date(a.commence_time) - new Date(b.commence_time)
-      );
-      const nextDate = new Date(sorted[0].commence_time)
-        .toISOString()
-        .split("T")[0];
-
-      gamesTomorrow = gamesArray.filter(game => {
-        const gameDate = new Date(game.commence_time).toISOString().split("T")[0];
-        return gameDate === nextDate;
-      });
-    }
 
     const matchups = gamesTomorrow.map(game => {
       const teamA = game.home_team;
@@ -212,7 +294,7 @@ async function fetchOddsForSport(sportKey, sportName, market = "h2h") {
       const teamA = game.home_team;
       const teamB = game.away_team;
 
-      game.bookmakers.forEach(book => {
+      game.bookmakers?.forEach(book => {
         const cleanName = cleanBookName(book.title);
         const bookMarket = book.markets?.find(m => m.key === market);
         const outcomes = bookMarket?.outcomes ?? [];
@@ -372,6 +454,7 @@ async function fetchOddsForSport(sportKey, sportName, market = "h2h") {
   }
 }
 
+
 // Generic endpoint for specific sport and market
 app.get("/odds/:sport/:market", async (req, res) => {
   const sportKey = Object.keys(SPORTS).find(key => key === req.params.sport);
@@ -393,6 +476,11 @@ app.get("/odds/:sport/:market", async (req, res) => {
     saveToCache(sportKey, market, data);
     res.json(data);
   } else {
+    const stale = getCachedData(sportKey, market, { allowStale: true });
+    if (stale) {
+      return res.json({ ...stale, stale: true });
+    }
+
     res.status(500).json({ error: "Failed to fetch odds" });
   }
 });
@@ -417,6 +505,11 @@ app.get("/odds/:sport", async (req, res) => {
     saveToCache(sportKey, "h2h", data);
     res.json(data);
   } else {
+    const stale = getCachedData(sportKey, "h2h", { allowStale: true });
+    if (stale) {
+      return res.json({ ...stale, stale: true });
+    }
+
     res.status(500).json({ error: "Failed to fetch odds" });
   }
 });
@@ -433,6 +526,11 @@ app.get("/nba/tomorrow", async (req, res) => {
     saveToCache("nba", "h2h", data);
     res.json(data);
   } else {
+    const stale = getCachedData("nba", "h2h", { allowStale: true });
+    if (stale) {
+      return res.json({ ...stale, stale: true });
+    }
+
     res.status(500).json({ error: "Failed to fetch odds" });
   }
 });
@@ -461,7 +559,7 @@ app.get("/best-bets", async (req, res) => {
 
   for (const [sportKey, sport] of Object.entries(SPORTS)) {
     for (const [marketKey, marketName] of Object.entries(MARKETS)) {
-      const data = getCachedData(sportKey, marketKey);
+      const data = getCachedData(sportKey, marketKey, { allowStale: true });
       if (!data) continue;
 
       data.games.forEach((game, gameIdx) => {
@@ -512,12 +610,11 @@ app.get("/best-bets", async (req, res) => {
   });
 });
 
-// Run background refresh every 15 minutes
-setInterval(refreshAllSports, 15 * 60 * 1000);
-
-// Initial refresh on startup
-refreshAllSports();
-
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});;
+  console.log(`Server running at http://localhost:${PORT}`);
+  refreshAllSports().catch(err => {
+    console.error("Background refresh failed:", err);
+  });
+});
+
+app.use(express.static("public"));
