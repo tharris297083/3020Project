@@ -12,7 +12,7 @@ const PORT = 3000;
 // Cache settings
 const CACHE_DIR = "./data";
 const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 
 // Ensure cache directory exists
 if (!fs.existsSync(CACHE_DIR)) {
@@ -179,6 +179,25 @@ function getLocalDateKey(date) {
   return `${year}-${month}-${day}`;
 }
 
+function getNextAvailableGames(gamesArray) {
+  const now = new Date();
+  const upcomingGames = gamesArray
+    .filter(game => game?.commence_time && new Date(game.commence_time) >= now)
+    .sort((a, b) => new Date(a.commence_time) - new Date(b.commence_time));
+
+  if (upcomingGames.length === 0) {
+    return { games: [], date: null };
+  }
+
+  const nextDate = getLocalDateKey(new Date(upcomingGames[0].commence_time));
+  const games = upcomingGames.filter(game => {
+    const gameDate = getLocalDateKey(new Date(game.commence_time));
+    return gameDate === nextDate;
+  });
+
+  return { games, date: nextDate };
+}
+
 function decimalToAmerican(decimal) {
   if (decimal === null || decimal === undefined) return null;
   if (decimal >= 2.0) return Math.round((decimal - 1) * 100);
@@ -254,15 +273,8 @@ async function fetchOddsForSport(sportKey, sportName, market = "h2h") {
 
     const gamesArray = Array.isArray(data) ? data : [data];
 
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(now.getDate() + 1);
-    const tomorrowStr = getLocalDateKey(tomorrow);
-
-    let gamesTomorrow = gamesArray.filter(game => {
-      const gameDate = getLocalDateKey(new Date(game.commence_time));
-      return gameDate === tomorrowStr;
-    });
+    const nextAvailable = getNextAvailableGames(gamesArray);
+    const gamesTomorrow = nextAvailable.games;
 
     const matchups = gamesTomorrow.map(game => {
       const teamA = game.home_team;
@@ -446,6 +458,7 @@ async function fetchOddsForSport(sportKey, sportName, market = "h2h") {
       best: bestPrices,
       sport: sportName,
       market: MARKETS[market],
+      date: nextAvailable.date,
       updated: new Date().toISOString()
     };
   } catch (err) {
